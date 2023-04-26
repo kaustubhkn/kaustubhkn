@@ -1,0 +1,44 @@
+import pygame
+import sys
+
+class Snake():
+    def __init__(self):
+        # Initialize Pygame and set up display window
+        pygame.init()
+        screen = pygame.display.set_mode((400, 600))
+        
+        self.speed = [0, 0]  # Initial starting position
+    
+        self.body = []  # Create an empty list for body segments
+        self.food = ['X'] * 25  # Generate food items
+        self.score = 0  # Set initial score
+        
+        self.clock = pygame.time.Clock()  # Start clock for fps updates
+        
+    def move(self, key):
+        """Move the snake according to arrow keys"""
+        if key == pygame.K_LEFT:
+            self.speed[0] = -5
+        elif key == pygame.K_RIGHT:
+            self.speed[0] = 5
+        elif key == pygame.K_UP:
+            self.speed[1] = -5
+        elif key == pygame.K_DOWN:
+            self.speed[1] = 5
+        
+    def update(self):
+        """Update the positions of the snake body segments"""
+        x, y = self.speed[:], self.speed[1:]
+        new_head = (x + 1, y + 1)
+        
+        # Add new head segment while deleting tail segment
+        del self.body[::len(self.body)]
+        self.body.append(new_head)
+        
+        for i in range(len(self.body)):
+            body_segments = pygame.Rect(self.body[i][0]*10, self.body[i+1][1]*10, 10, 10)
+            screen_collision = False
+            
+            # Check collisions with wall boundaries and snake's own body segments
+            if (screen.get_rect().collidepoint(body_segments)[0][0] == -1 or screen.get_rect().collidepoint(body_segments)[0][0] == 1):
+                body_
